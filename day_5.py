@@ -1,9 +1,11 @@
 def parse_input():
     ordering_rules = {}
     update_pages = []
+
     with open('day_5_in.txt') as f:
         for line in f:
             line = line.strip()
+
             if '|' in line:
                 [previous_page, following_page] = line.split('|')
                 if previous_page in ordering_rules:
@@ -12,6 +14,7 @@ def parse_input():
                     ordering_rules[previous_page] = [following_page]
             elif ',' in line:
                 update_pages.append(line.split(','))
+                
     return ordering_rules, update_pages
 
 def are_following_pages_valid(ordering_rules, update, i, page):
@@ -66,7 +69,6 @@ def update_needs_correcting(update):
                 update.insert(i, update.pop(j))
                 return True 
     return False
-
 
 if __name__ == '__main__':
     [ordering_rules, update_pages] = parse_input()
