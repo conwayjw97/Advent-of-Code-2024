@@ -21,16 +21,21 @@ class Guard:
     
     def move(self, map):
         y_dir, x_dir = self.dir_to_vec[self.dir]
+        new_x = self.x + x_dir
+        new_y = self.y + y_dir
+        if new_x < 0 or new_y < 0:
+            self.is_off_map = True 
+            return
 
         try: 
-            new_pos = map[self.y + y_dir][self.x + x_dir]
+            new_pos = map[new_y][new_x]
         except IndexError: 
             self.is_off_map = True 
             return
         
         if new_pos == '.' or new_pos == 'X':
             map[self.y][self.x] = 'X'
-            map[self.y + y_dir][self.x + x_dir] = self.dir
+            map[new_y][new_x] = self.dir
             self.x += x_dir 
             self.y += y_dir
             if new_pos == '.':
@@ -62,7 +67,15 @@ def parse_input():
                 
     return map, guard
 
+def write_out(map):
+    with open('day_6_out.txt', 'w+') as f:
+        for row in map:
+            for col in row:
+                f.write(col)
+            f.write('\n')
+
 if __name__ == '__main__':
     map, guard = parse_input()
     guard.patrol_map(map)
     print(guard.positions_visited)
+    write_out(map)
